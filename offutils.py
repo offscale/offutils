@@ -8,13 +8,13 @@ import urllib2
 
 from urlparse import urlsplit, urlunsplit
 from types import DictType, NoneType, MethodType, ClassType
-from itertools import ifilter, imap
-from collections import Counter, namedtuple
+from itertools import ifilter, imap, islice
+from collections import Counter, namedtuple, deque
 
 from pprint import PrettyPrinter
 
 __author__ = 'Samuel Marks'
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -219,3 +219,13 @@ def l_of_d_intersection(ld0, ld1, keys):
     return (ld0[res.idx]
             for result in processed_ld0.intersection(processed_ld1)
             for res in result.values())
+
+
+it_consumes = lambda it, n=None: deque(it, maxlen=0) if n is None else next(islice(it, n, n), None)
+
+def update_d(d, arg=None, **kwargs):
+    if arg:
+        d.update(arg)
+    if kwargs:
+        d.update(kwargs)
+    return d

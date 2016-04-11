@@ -15,6 +15,6 @@ if __name__ == '__main__':
         name=package_name,
         author=__author__,
         version=__version__,
-        # test_suite='tests',
+        test_suite='tests',
         py_modules=[package_name]
     )

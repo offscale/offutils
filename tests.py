@@ -1,6 +1,6 @@
 from unittest import TestCase, main as unittest_main
-
-from offutils import lists_of_dicts_intersection_on, it_consumes
+from itertools import chain
+from offutils import lists_of_dicts_intersection_on, it_consumes, lists_of_dicts_intersection_on_any
 
 
 class TestListOfDictsIntersectionOn(TestCase):
@@ -27,7 +27,8 @@ class TestListOfDictsIntersectionOn(TestCase):
 
         r1 = tuple(lists_of_dicts_intersection_on(('foo', 'can'), l0, l1))
         self.assertGreater(len(r1), 0, 'r1 is empty')
-        it_consumes(self.assertDictEqual(obj, l0[idx])
+        it_consumes(all((self.assertEqual(obj['foo'], l1[idx]['foo']),
+                         self.assertEqual(obj['can'], l1[idx]['can'])))
                     for idx, obj in enumerate(r1))
 
         r2 = tuple(lists_of_dicts_intersection_on(('can', 'bar'), l1, l2))
@@ -35,6 +36,13 @@ class TestListOfDictsIntersectionOn(TestCase):
         it_consumes(all((self.assertEqual(obj['can'], l2[idx]['can']),
                          self.assertEqual(obj['bar'], l2[idx]['bar'])))
                     for idx, obj in enumerate(r2))
+
+        r3 = next(lists_of_dicts_intersection_on_any((('foo', 'bar'), ('foo', 'can')), l0, l1))
+
+        self.assertIsNotNone(r3, 'r3 is None')
+        it_consumes(all((self.assertEqual(obj['foo'], l1[idx]['foo']),
+                         self.assertEqual(obj['can'], l1[idx]['can'])))
+                    for idx, obj in enumerate([r3]))
 
     def test_real(self):
         options = [{'availability_zone': {u'name': u'ap-southeast-2a', u'zone_state': u'available',

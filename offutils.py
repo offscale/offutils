@@ -10,11 +10,12 @@ from urlparse import urlsplit, urlunsplit
 from types import DictType, NoneType, MethodType, ClassType
 from itertools import ifilter, imap, islice
 from collections import Counter, namedtuple, deque
+from bisect import bisect_left
 
 from pprint import PrettyPrinter
 
 __author__ = 'Samuel Marks'
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -131,13 +132,15 @@ def percent_overlap(s0, s1):
     return overlap_i / len(s1) * 100
 
 
-from bisect import bisect_left
-
-
 def contains(a, x):
     """Return True if the sorted array a contains x."""
     i = bisect_left(a, x)
     return i != len(a) and a[i] == x
+
+
+def lists_of_dicts_intersection_on_any(keysl, list0, list1):
+    return (d for gen in (lists_of_dicts_intersection_on(keys, list0, list1) for keys in keysl)
+            for d in gen if d)
 
 
 def lists_of_dicts_intersection_on(keys, list0, list1):
@@ -222,6 +225,7 @@ def l_of_d_intersection(ld0, ld1, keys):
 
 
 it_consumes = lambda it, n=None: deque(it, maxlen=0) if n is None else next(islice(it, n, n), None)
+
 
 def update_d(d, arg=None, **kwargs):
     if arg:

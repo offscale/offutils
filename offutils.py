@@ -9,13 +9,13 @@ import urllib2
 from urlparse import urlsplit, urlunsplit
 from types import DictType, NoneType, MethodType, ClassType
 from itertools import ifilter, imap, islice
-from collections import Counter, namedtuple, deque
+from collections import Counter, namedtuple, deque, Iterable
 from bisect import bisect_left
 
 from pprint import PrettyPrinter
 
 __author__ = 'Samuel Marks'
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -184,11 +184,6 @@ class hashabledict(dict):
 
 
 def normalise(idx, obj, keys, obj_id):
-    '''print 'normalise got'
-    print 'idx =', idx
-    print 'obj =', obj
-    print 'keys =', keys
-    print 'obj_id =', obj_id'''
     return hashabledict((k, namedtuple('Elem', 'idx id value')(idx, obj_id, v))
                         for k, v in obj.iteritems() if k in keys)
 
@@ -233,3 +228,12 @@ def update_d(d, arg=None, **kwargs):
     if kwargs:
         d.update(kwargs)
     return d
+
+
+def flatten(l):
+    for el in l:
+        if isinstance(el, Iterable) and not isinstance(el, basestring):
+            for sub in flatten(el):
+                yield sub
+        else:
+            yield el

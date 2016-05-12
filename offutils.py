@@ -15,7 +15,7 @@ from bisect import bisect_left
 from pprint import PrettyPrinter
 
 __author__ = 'Samuel Marks'
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -237,3 +237,9 @@ def flatten(l):
                 yield sub
         else:
             yield el
+
+
+def binary_search(a, x, lo=0, hi=None):
+    hi = hi if hi is not None else len(a)
+    pos = bisect_left(a, x, lo, hi)
+    return pos if pos != hi and a[pos] == x else -1

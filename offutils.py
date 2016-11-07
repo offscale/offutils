@@ -243,3 +243,6 @@ def binary_search(a, x, lo=0, hi=None):
     hi = hi if hi is not None else len(a)
     pos = bisect_left(a, x, lo, hi)
     return pos if pos != hi and a[pos] == x else -1
+
+
+find_replace_many = lambda s, repls: reduce(lambda a, kv: a.replace(*kv), repls, s)

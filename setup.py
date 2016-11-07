@@ -5,11 +5,11 @@ from ast import parse
 if __name__ == '__main__':
     package_name = 'offutils'
 
-    get_vals = lambda var0, var1: imap(lambda buf: next(imap(lambda e: e.value.s, parse(buf).body)),
-                                       ifilter(lambda line: line.startswith(var0) or line.startswith(var1), f))
-
     with open(package_name + '.py') as f:
-        __author__, __version__ = get_vals('__version__', '__author__')
+        __author__, __version__ = imap(
+            lambda buf: next(imap(lambda e: e.value.s, parse(buf).body)),
+            ifilter(lambda line: line.startswith('__version__') or line.startswith('__author__'), f)
+        )
 
     setup(
         name=package_name,

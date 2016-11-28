@@ -1,6 +1,6 @@
 from unittest import TestCase, main as unittest_main
 from itertools import chain
-from offutils import lists_of_dicts_intersection_on, it_consumes, lists_of_dicts_intersection_on_any
+from offutils import lists_of_dicts_intersection_on, it_consumes, lists_of_dicts_intersection_on_any, binary_search
 
 
 class TestListOfDictsIntersectionOn(TestCase):
@@ -70,6 +70,14 @@ class TestListOfDictsIntersectionOn(TestCase):
         self.assertGreater(len(intersect), 0, 'intersect is empty')
         it_consumes(self.assertEqual(obj['availability_zone'], options[idx]['availability_zone'])
                     for idx, obj in enumerate(intersect))
+
+
+class TestBinarySearch(TestCase):
+    a = tuple(xrange(10))
+
+    def test_binary_search(self):
+        self.assertTrue(binary_search(self.a, 5))
+        self.assertEqual(binary_search(self.a, 15), -1)
 
 
 if __name__ == '__main__':

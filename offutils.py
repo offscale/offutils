@@ -5,6 +5,8 @@
 import socket
 import mimetypes
 import urllib2
+from random import SystemRandom
+from string import ascii_uppercase, digits
 
 from urlparse import urlsplit, urlunsplit
 from types import DictType, NoneType, MethodType, ClassType
@@ -245,4 +247,18 @@ def binary_search(a, x, lo=0, hi=None):
     return pos if pos != hi and a[pos] == x else -1
 
 
+def validate_conf(conf, required, logger=namedtuple('pp', 'error')(pp), name='conf'):
+    errors = None
+    for k, v in required:
+        if k not in conf:
+            logger.error('Expected {k} in {name}, something like: {v}'.format(name=name, k=k, v=v))
+            errors = True
+    if errors is not None:
+        raise ValueError('conf is invalid')
+
+
+EmptyGet = namedtuple('EmptyGet', 'get')(lambda: {})
+
 find_replace_many = lambda s, repls: reduce(lambda a, kv: a.replace(*kv), repls, s)
+
+gen_random_str = lambda n: ''.join(SystemRandom().choice(ascii_uppercase + digits) for _ in xrange(n))

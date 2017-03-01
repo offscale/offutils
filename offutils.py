@@ -11,7 +11,7 @@ from string import ascii_uppercase, digits
 from urlparse import urlsplit, urlunsplit
 from types import DictType, NoneType, MethodType, ClassType
 from itertools import ifilter, imap, islice, takewhile
-from collections import Counter, namedtuple, deque, Iterable
+from collections import Counter, namedtuple, deque, Iterable, OrderedDict
 from bisect import bisect_left
 
 from pprint import PrettyPrinter
@@ -19,7 +19,7 @@ from pprint import PrettyPrinter
 import operator
 
 __author__ = 'Samuel Marks'
-__version__ = '0.0.7'
+__version__ = '0.0.8'
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -269,11 +269,40 @@ def get_sorted_strnum(iter_of_strnum):
 def filter_strnums(op, val, strnums):
     mapping = {'>=': operator.ge, '<': operator.lt, '=': operator.eq, '!=': operator.ne, '^': operator.xor,
                '>': operator.gt, '<=': operator.le}  # TODO: There must be a full list somewhere!
-    op = mapping.get(op, mapping[getattr(operator, op)])
+    op_f = mapping.get(op) or getattr(operator, op)
     return (strnum for strnum in strnums
-            if op(int(''.join(takewhile(str.isdigit, strnum[::-1]))[::-1]),
-                  int(val)))
+            if op_f(int(''.join(takewhile(str.isdigit, strnum[::-1]))[::-1]),
+                    int(val)))
 
+
+def add_to(obj, value, dict_typ=OrderedDict, *keys):  # ALPHA version! - TODO: Complete
+    if not obj:
+        return obj
+    elif not keys:
+        obj = value
+        return obj
+
+    assigned = False
+    o = None
+    for key in keys:
+        if o is not None:
+            if key in o:
+                o = o[key]
+            else:
+                o = {key: None}
+                assigned = True
+        elif key in obj:
+            o = obj[key]
+        else:
+            o = {key: None}
+            assigned = True
+    if not assigned:
+        pass
+
+    return o
+
+
+is_sequence = lambda arg: (not hasattr(arg, "strip") and hasattr(arg, "__getitem__") or hasattr(arg, "__iter__"))
 
 EmptyGet = namedtuple('EmptyGet', 'get')(lambda: {})
 

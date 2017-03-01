@@ -1,6 +1,11 @@
+from collections import OrderedDict
+from collections import defaultdict
 from unittest import TestCase, main as unittest_main
 from itertools import chain
-from offutils import lists_of_dicts_intersection_on, it_consumes, lists_of_dicts_intersection_on_any, binary_search
+from copy import deepcopy
+
+from offutils import lists_of_dicts_intersection_on, it_consumes, lists_of_dicts_intersection_on_any, binary_search, \
+    add_to
 
 
 class TestListOfDictsIntersectionOn(TestCase):
@@ -78,6 +83,34 @@ class TestBinarySearch(TestCase):
     def test_binary_search(self):
         self.assertTrue(binary_search(self.a, 5))
         self.assertEqual(binary_search(self.a, 15), -1)
+
+
+class TestAddTo(TestCase):
+    '''
+    ds = (
+        ,
+        {'foo': {'bar': None}},
+        {'foo': None},
+        None
+    )
+    '''
+
+    def test_add_to(self):
+        l = lambda: defaultdict(l)
+        table = l()
+
+        table[0][1][2][3][4][5] = 6
+
+        val = {'c': 7}
+
+        d0 = {'foo': {'bar': {'can': {'haz': OrderedDict({'a': 5, 'b': 6})}}}}
+        e0 = deepcopy(d0)
+        e0['foo']['bar']['can']['haz']['c'] = val['c']
+        print 'd0 =', d0
+        print 'e0 =', e0
+        print "add_to(d0, val, OrderedDict, 'foo', 'bar', 'can', 'haz') =", add_to(d0, val, OrderedDict, 'foo', 'bar', 'can', 'haz')
+        self.assertDictEqual(add_to(d0, val, OrderedDict, 'foo', 'bar', 'can', 'haz'), e0)
+        self.assertDictEqual(d0, e0)
 
 
 if __name__ == '__main__':

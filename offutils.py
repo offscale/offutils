@@ -267,7 +267,9 @@ def get_sorted_strnum(iter_of_strnum):
 
 
 def filter_strnums(op, val, strnums):
-    mapping = {'>=': operator.ge, '<': operator.lt, '=': operator.eq, '!=': operator.ne, '^': operator.xor,
+    mapping = {'>=': operator.ge, '<': operator.lt,
+               '=': operator.eq, '==': operator.eq,
+               '!=': operator.ne, '^': operator.xor,
                '>': operator.gt, '<=': operator.le}  # TODO: There must be a full list somewhere!
     op_f = mapping.get(op) or getattr(operator, op)
     return (strnum for strnum in strnums

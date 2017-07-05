@@ -19,7 +19,7 @@ from pprint import PrettyPrinter
 import operator
 
 __author__ = 'Samuel Marks'
-__version__ = '0.0.8'
+__version__ = '0.0.9'
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -311,3 +311,12 @@ EmptyGet = namedtuple('EmptyGet', 'get')(lambda: {})
 find_replace_many = lambda s, repls: reduce(lambda a, kv: a.replace(*kv), repls, s)
 
 gen_random_str = lambda n: ''.join(SystemRandom().choice(ascii_uppercase + digits) for _ in xrange(n))
+
+
+def str_from_file(fname):
+    """
+    :param fname :type basestring
+    :returns content of file :type str
+    """
+    with open(fname) as f:
+        return f.read()

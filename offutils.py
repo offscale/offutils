@@ -2,24 +2,22 @@
 
 # TODO: Move everything from this package to better locations
 
-import socket
 import mimetypes
+import operator
+import socket
 import urllib2
+from bisect import bisect_left
+from collections import Counter, namedtuple, deque, Iterable, OrderedDict
+from itertools import ifilter, imap, islice, takewhile
+from os import urandom
+from pprint import PrettyPrinter
 from random import SystemRandom
 from string import ascii_uppercase, digits
-
-from urlparse import urlsplit, urlunsplit
 from types import DictType, NoneType, MethodType, ClassType
-from itertools import ifilter, imap, islice, takewhile
-from collections import Counter, namedtuple, deque, Iterable, OrderedDict
-from bisect import bisect_left
-
-from pprint import PrettyPrinter
-
-import operator
+from urlparse import urlsplit, urlunsplit
 
 __author__ = 'Samuel Marks'
-__version__ = '0.0.9'
+__version__ = '0.0.10'
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -270,7 +268,8 @@ def filter_strnums(op, val, strnums):
     mapping = {'>=': operator.ge, '<': operator.lt,
                '=': operator.eq, '==': operator.eq,
                '!=': operator.ne, '^': operator.xor,
-               '>': operator.gt, '<=': operator.le}  # TODO: There must be a full list somewhere!
+               '>': operator.gt, '<=': operator.le,
+               'in': operator.contains}  # TODO: There must be a full list somewhere!
     op_f = mapping.get(op) or getattr(operator, op)
     return (strnum for strnum in strnums
             if op_f(int(''.join(takewhile(str.isdigit, strnum[::-1]))[::-1]),
@@ -320,3 +319,8 @@ def str_from_file(fname):
     """
     with open(fname) as f:
         return f.read()
+
+
+def generate_temp_password(length):
+    chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+    return "".join(chars[ord(c) % len(chars)] for c in urandom(length))

@@ -17,7 +17,7 @@ from types import DictType, NoneType, MethodType, ClassType
 from urlparse import urlsplit, urlunsplit
 
 __author__ = 'Samuel Marks'
-__version__ = '0.0.10'
+__version__ = '0.0.11'
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -321,6 +321,10 @@ def str_from_file(fname):
         return f.read()
 
 
-def generate_temp_password(length):
+def generate_random_alphanum(length):
     chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
     return "".join(chars[ord(c) % len(chars)] for c in urandom(length))
+
+
+def ensure_quoted(s, q="'"):
+    return '{q}{s}{q}'.format(q=q, s=s) if isinstance(s, basestring) and len(s) and s[0] not in ('"', "'") else s

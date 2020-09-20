@@ -31,11 +31,17 @@ def normalise(idx, obj, keys, obj_id):
 def l_of_d_intersection(ld0, ld1, keys):
     """Find intersection between a list of dicts and a list of dicts/objects
 
-    :param ld0 :type [DictType] or :type [AnyObject]
-    :param ld1 :type [DictType]
-    :param keys :type ListType
+    :param ld0:
+    :type ld0: Union[Dict, Any]
+
+    :param ld0:
+    :type ld0: Dict
+
+    :param keys:
+    :type keys: List
 
     :returns intersection of ld0 and ld1 where key is equal. At best, will return `ld0` in full. At worst: [].
+    :rtype: List
     """
     processed_ld0 = frozenset(
         [

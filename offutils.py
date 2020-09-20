@@ -13,7 +13,7 @@ from os import urandom
 from pprint import PrettyPrinter
 from random import SystemRandom
 from string import ascii_uppercase, digits
-from types import DictType, NoneType, MethodType, ClassType
+from types import MethodType
 from urllib.parse import urlsplit, urlunsplit
 from functools import reduce
 
@@ -25,12 +25,12 @@ pp = PrettyPrinter(indent=4).pprint
 unroll_d = lambda d, *keys: (d[key] for key in keys)
 obj_to_d = (
     lambda obj: obj
-    if type(obj) is DictType
+    if isinstance(obj, dict)
     else {k: getattr(obj, k) for k in dir(obj) if not k.startswith("_")}
 )
 
 find_one = lambda key, enumerable, attr: next(
-    [obj for obj in enumerable if getattr(obj, attr) == key]
+    obj for obj in enumerable if getattr(obj, attr) == key
 )
 find_one.__doc__ == """ @raises `StopIteration` if not found """
 
@@ -50,9 +50,13 @@ def is_instance_method(obj):
     """Checks if an object is a bound method on an instance."""
     if not isinstance(obj, MethodType):
         return False  # Not a method
-    if obj.__self__ is None:
+    elif obj.__self__ is None:
         return False  # Method is not bound
-    if issubclass(obj.__self__.__class__, type) or obj.__self__.__class__ is ClassType:
+    elif (
+        issubclass(obj.__self__.__class__, type)
+        or hasattr(obj.__self__, "__class__")
+        and obj.__self__.__class__
+    ):
         return False  # Method is a classmethod
     return True
 
@@ -76,16 +80,19 @@ def first_of_each(*sequences):
 
 def find_by_key(d, key):
     """
-    :param d :type DictType
-    :param key :type instanceof basestring
+    :param d:
+    :type d: ```dict```
+
+    :param key:
+    :type key: ```str```
     """
     if key in d:
         return d[key]
 
     for k, v in list(d.items()):
-        if type(v) is DictType:
+        if isinstance(type(v), dict):
             item = find_by_key(v, key)
-            if type(item) is not NoneType:
+            if item is not None:
                 return item
     raise ValueError('"{key}" not found'.format(key=key))
 
@@ -93,7 +100,7 @@ def find_by_key(d, key):
 def subsequence(many_d):
     """
     :param many_d enumerable containing many :type DictType
-    :returns entries which are common between all :type TupleType
+    :returns entries which are common between all :type type(tuple)
 
     Example:
          >>> ds = {'a': 5, 'b': 6}, {'a': 5}, {'a': 7}
@@ -124,12 +131,17 @@ l_of_d_intersection = lambda ld0, ld1, keys: tuple(
     if [key for key in keys if elem.get(key, False) == elem.get(key, None)]
 )
 l_of_d_intersection.__doc__ = """ Find intersection between a list of dicts and a list of dicts/objects
+:param ld0:
+:type ld0: Union[Dict, Any]
 
-:param ld0 :type [DictType] or :type [AnyObject]
-:param ld1 :type [DictType]
-:param keys :type ListType
+:param ld0:
+:type ld0: Dict
+
+:param keys:
+:type keys: List
 
 :returns intersection of ld0 and ld1 where key is equal
+:rtype: List
 """
 
 ping_port = lambda host="localhost", port=2379: (
@@ -173,10 +185,10 @@ def lists_of_dicts_intersection_on(keys, list0, list1):
     sortable values.
 
     """
-    if len(list0) and type(list0[0]) is not DictType:
+    if len(list0) and not isinstance(list0[0], dict):
         _class = type(list0[0]).__name__
         list0 = list(map(obj_to_d, list0))
-    if len(list1) and type(list1[0]) is not DictType:
+    if len(list1) and not isinstance(list1[0], dict):
         _class = type(list1[0]).__name__
         list1 = list(map(obj_to_d, list1))
 
@@ -221,18 +233,23 @@ def normalise(idx, obj, keys, obj_id):
 def l_of_d_intersection(ld0, ld1, keys):
     """Find intersection between a list of dicts and a list of dicts/objects
 
-    :param ld0 :type [DictType] or :type [AnyObject]
-    :param ld1 :type [DictType]
-    :param keys :type ListType
+    :param ld0:
+    :type ld0: Union[Dict, Any]
 
-    :returns intersection of ld0 and ld1 where key is equal.
-                 At best, will return `ld0` in full. At worst: [].
+    :param ld0:
+    :type ld0: Dict
+
+    :param keys:
+    :type keys: List
+
+    :returns intersection of ld0 and ld1 where key is equal. At best, will return `ld0` in full. At worst: [].
+    :rtype: List
     """
     list0, list1 = ld0, ld1
-    if len(list0) and type(list0[0]) is not DictType:
+    if len(list0) and not isinstance(list0[0], dict):
         _class = type(list0[0])
         list0 = list(map(obj_to_d, list0))
-    if len(list1) and type(list1[0]) is not DictType:
+    if len(list1) and not isinstance(list1[0], dict):
         _class = type(list1[0])
         list1 = list(map(obj_to_d, list1))
 

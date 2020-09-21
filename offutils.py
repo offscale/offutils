@@ -5,7 +5,12 @@
 import mimetypes
 import operator
 import socket
-import urllib.request, urllib.error, urllib.parse
+
+from sys import version
+
+if version[0] == "2":
+    from itertools import imap as map
+
 from bisect import bisect_left
 from collections import Counter, namedtuple, deque, Iterable, OrderedDict
 from itertools import islice, takewhile
@@ -14,7 +19,7 @@ from pprint import PrettyPrinter
 from random import SystemRandom
 from string import ascii_uppercase, digits
 from types import MethodType
-from urllib.parse import urlsplit, urlunsplit
+
 from functools import reduce
 
 __author__ = "Samuel Marks"
@@ -39,11 +44,25 @@ def raise_f(exception, *args, **kwargs):
     raise exception(*args, **kwargs)
 
 
-def http_put(url, payload):
-    request = urllib.request.Request(url, data=payload)
-    request.add_header("Content-Type", mimetypes.types_map[".txt"])
-    request.get_method = lambda: "PUT"
-    return urllib.request.build_opener(urllib.request.HTTPHandler).open(request)
+if version[0] == "3":
+    import urllib.request, urllib.error, urllib.parse
+    from urllib.parse import urlsplit, urlunsplit
+
+    def http_put(url, payload):
+        request = urllib.request.Request(url, data=payload)
+        request.add_header("Content-Type", mimetypes.types_map[".txt"])
+        request.get_method = lambda: "PUT"
+        return urllib.request.build_opener(urllib.request.HTTPHandler).open(request)
+
+
+else:
+    import urllib2
+
+    def http_put(url, payload):
+        request = urllib2.Request(url, data=payload)
+        request.add_header("Content-Type", mimetypes.types_map[".txt"])
+        request.get_method = lambda: "PUT"
+        return urllib2.build_opener(urllib2.HTTPHandler).open(request)
 
 
 def is_instance_method(obj):

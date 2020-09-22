@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import
+
 # TODO: Move everything from this package to better locations
 
 import mimetypes

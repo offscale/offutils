@@ -1,15 +1,15 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from sys import version
-from ast import parse
 
 if version[0] == "2":
     from itertools import imap as map, ifilter as filter
-
+from os import path
+from ast import parse
 
 if __name__ == "__main__":
     package_name = "offutils"
 
-    with open(package_name + ".py") as f:
+    with open(path.join(package_name, "__init__.py")) as f:
         __author__, __version__ = map(
             lambda buf: next(map(lambda e: e.value.s, parse(buf).body)),
             filter(
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         name=package_name,
         author=__author__,
         version=__version__,
-        description="Utility functions for many off- prefixed python modules",
+        description="Shared library (for `off-` prefixed packages).",
         classifiers=[
             "Development Status :: 7 - Inactive",
             "Intended Audience :: Developers",
@@ -33,7 +33,10 @@ if __name__ == "__main__":
             "License :: OSI Approved :: Apache Software License",
             "Programming Language :: Python",
             "Programming Language :: Python :: 2.7",
+            "Programming Language :: Python :: 3",
         ],
-        test_suite="tests",
-        py_modules=[package_name],
+        install_requires=["pyyaml"],
+        test_suite=package_name + ".tests",
+        packages=find_packages(),
+        package_dir={package_name: package_name},
     )

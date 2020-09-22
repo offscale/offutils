@@ -2,7 +2,7 @@ from setuptools import setup
 from sys import version
 from ast import parse
 
-if version[0] == '2':
+if version[0] == "2":
     from itertools import imap as map, ifilter as filter
 
 

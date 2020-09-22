@@ -8,6 +8,8 @@ import socket
 
 from sys import version
 
+from offutils.util import iteritems, itervalues
+
 if version[0] == "2":
     from itertools import imap as map
 
@@ -83,9 +85,10 @@ def is_instance_method(obj):
 # From: http://codereview.stackexchange.com/a/24416
 def url_path_join(*parts):
     """Normalize url parts and join them with a slash."""
-    schemes, netlocs, paths, queries, fragments = list(
-        zip(*(urlsplit(part) for part in parts))
+    schemes, netlocs, paths, queries, fragments = zip(
+        *(urlsplit(part) for part in parts)
     )
+
     scheme, netloc, query, fragment = first_of_each(
         schemes, netlocs, queries, fragments
     )
@@ -108,7 +111,7 @@ def find_by_key(d, key):
     if key in d:
         return d[key]
 
-    for k, v in list(d.items()):
+    for k, v in iteritems(d):
         if isinstance(type(v), dict):
             item = find_by_key(v, key)
             if item is not None:
@@ -128,9 +131,9 @@ def subsequence(many_d):
     """
     c = Counter()
     for d in many_d:
-        for k, v in list(d.items()):
+        for k, v in iteritems(d):
             c["{0};;;{1}".format(k, v)] += 0.5
-    for k, v in list(c.items()):
+    for k, v in iteritems(c):
         c[k] = int(v)  # Remove all halves, and enable `.elements` to work
     return tuple(c.elements())
 
@@ -138,7 +141,7 @@ def subsequence(many_d):
 find_common_d = lambda target_d, ds: next(
     d
     for d in ds
-    if any(getattr(d, k) == v for k, v in list(target_d.items()) if k in obj_to_d(d))
+    if any(getattr(d, k) == v for k, v in iteritems(target_d) if k in obj_to_d(d))
 )
 find_common_d.__doc__ = (
     """ Return first intersecting element between an object/dict and a dict """
@@ -244,7 +247,7 @@ class hashabledict(dict):
 def normalise(idx, obj, keys, obj_id):
     return hashabledict(
         (k, namedtuple("Elem", "idx id value")(idx, obj_id, v))
-        for k, v in list(obj.items())
+        for k, v in iteritems(obj)
         if k in keys
     )
 
@@ -297,7 +300,7 @@ def l_of_d_intersection(ld0, ld1, keys):
     return (
         ld0[res.idx]
         for result in processed_ld0.intersection(processed_ld1)
-        for res in list(result.values())
+        for res in itervalues(result)
     )
 
 

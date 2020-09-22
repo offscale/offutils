@@ -1,9 +1,20 @@
 from collections import namedtuple
+from operator import methodcaller
+from sys import version
+
+if version[0] == "2":
+    iteritems = methodcaller("iteritems")
+    itervalues = methodcaller("itervalues")
+    iterkeys = methodcaller("iterkeys")
+else:
+    iteritems = methodcaller("items")
+    itervalues = methodcaller("values")
+    iterkeys = methodcaller("keys")
 
 
 def obj_equal_on(obj0, obj1, keys):
     for key in keys:
-        if obj0.get(key, False) != obj1.get(key, None):
+        if obj0.get(key, False) != obj1.get(key):
             return False
     return True
 
@@ -23,7 +34,7 @@ class hashabledict(dict):
 def normalise(idx, obj, keys, obj_id):
     return hashabledict(
         (k, namedtuple("Elem", "idx id value")(idx, obj_id, v))
-        for k, v in list(obj.items())
+        for k, v in iteritems(obj)
         if k in keys
     )
 
@@ -67,7 +78,7 @@ def l_of_d_intersection(ld0, ld1, keys):
     return [
         ld0[res.idx]
         for result in processed_ld0.intersection(processed_ld1)
-        for res in list(result.values())
+        for res in itervalues(result)
     ]
 
 

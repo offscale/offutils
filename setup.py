@@ -1,10 +1,12 @@
-from setuptools import setup, find_packages
 from sys import version
+
+from setuptools import find_packages, setup
 
 if version[0] == "2":
     from itertools import imap as map, ifilter as filter
-from os import path
+
 from ast import parse
+from os import path
 
 if __name__ == "__main__":
     package_name = "offutils"

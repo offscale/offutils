@@ -2,29 +2,28 @@
 
 from __future__ import absolute_import
 
-# TODO: Move everything from this package to better locations
-
 import mimetypes
 import operator
 import socket
-
 from sys import version
 
 from offutils.util import iteritems, itervalues
+
+# TODO: Move everything from this package to better locations
+
 
 if version[0] == "2":
     from itertools import imap as map
 
 from bisect import bisect_left
-from collections import Counter, namedtuple, deque, Iterable, OrderedDict
+from collections import Counter, Iterable, OrderedDict, deque, namedtuple
+from functools import reduce
 from itertools import islice, takewhile
 from os import urandom
 from pprint import PrettyPrinter
 from random import SystemRandom
 from string import ascii_uppercase, digits
 from types import MethodType
-
-from functools import reduce
 
 __author__ = "Samuel Marks"
 __version__ = "0.0.11"
@@ -49,7 +48,9 @@ def raise_f(exception, *args, **kwargs):
 
 
 if version[0] == "3":
-    import urllib.request, urllib.error, urllib.parse
+    import urllib.error
+    import urllib.parse
+    import urllib.request
     from urllib.parse import urlsplit, urlunsplit
 
     def http_put(url, payload):
@@ -57,7 +58,6 @@ if version[0] == "3":
         request.add_header("Content-Type", mimetypes.types_map[".txt"])
         request.get_method = lambda: "PUT"
         return urllib.request.build_opener(urllib.request.HTTPHandler).open(request)
-
 
 else:
     import urllib2

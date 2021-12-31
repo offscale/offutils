@@ -1,15 +1,14 @@
-from collections import OrderedDict
-from collections import defaultdict
-from unittest import TestCase, main as unittest_main
-from itertools import chain
+from collections import OrderedDict, defaultdict
 from copy import deepcopy
+from unittest import TestCase
+from unittest import main as unittest_main
 
 from offutils import (
-    lists_of_dicts_intersection_on,
-    it_consumes,
-    lists_of_dicts_intersection_on_any,
-    binary_search,
     add_to,
+    binary_search,
+    it_consumes,
+    lists_of_dicts_intersection_on,
+    lists_of_dicts_intersection_on_any,
 )
 
 

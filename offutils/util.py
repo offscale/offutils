@@ -1,3 +1,7 @@
+"""
+Utility functions for offutils
+"""
+
 from collections import namedtuple
 from operator import methodcaller
 from sys import version
@@ -13,6 +17,21 @@ else:
 
 
 def obj_equal_on(obj0, obj1, keys):
+    """
+    Check if—for key in keys—obj0[key] matches obj1[key]
+
+    :param obj0: First object
+    :type obj0: ```dict``
+
+    :param obj1: Second object
+    :type obj1: ```dict```
+
+    :param keys: Iterable of keys
+    :type keys: ```Iterable[str]```
+
+    :return: Whether they are equal
+    :rtype: ```bool```
+    """
     for key in keys:
         if obj0.get(key, False) != obj1.get(key):
             return False
@@ -20,18 +39,43 @@ def obj_equal_on(obj0, obj1, keys):
 
 
 class hashabledict(dict):
+    """
+    Immutable ```Mapping[str, Any]``
+    """
+
     # From: http://stackoverflow.com/q/1151658
     def __key(self):
+        """
+        :rtype: ```frozenset```
+        """
         return frozenset(self)
 
     def __hash__(self):
+        """
+        Return the hash value for the given object.
+
+        :return: hash value
+        :rtype: ```int```
+        """
         return hash(self.__key())
 
     def __eq__(self, other):
+        """
+        Check whether other is equal
+
+        :return: whether other is equal
+        :rtype: ```bool```
+        """
         return self.__key() == other.__key()
 
 
 def normalise(idx, obj, keys, obj_id):
+    """
+    Normalise input obj whence key within.
+
+    :return: Hashable dict mapping key to (idx, id, value)
+    :rtype: ```hashabledict[str, NamedTuple('Elem', [('idx', int), ('id', int), ('value', Any)])]```
+    """
     return hashabledict(
         (k, namedtuple("Elem", "idx id value")(idx, obj_id, v))
         for k, v in iteritems(obj)
@@ -42,37 +86,33 @@ def normalise(idx, obj, keys, obj_id):
 def l_of_d_intersection(ld0, ld1, keys):
     """Find intersection between a list of dicts and a list of dicts/objects
 
-    :param ld0:
-    :type ld0: Union[Dict, Any]
+    :param ld0: List of dictionaries|objects
+    :type ld0: ```Union[dict, Any]```
 
-    :param ld0:
-    :type ld0: Dict
+    :param ld1: List of dictionaries
+    :type ld1: ```dict```
 
     :param keys:
     :type keys: List
 
     :returns intersection of ld0 and ld1 where key is equal. At best, will return `ld0` in full. At worst: [].
-    :rtype: List
+    :rtype: ```List[Any]```
     """
     processed_ld0 = frozenset(
-        [
-            _f
-            for _f in [
-                normalise(idx_obj[0], idx_obj[1], keys, id(idx_obj[1]))
-                for idx_obj in enumerate(ld0)
-            ]
-            if _f
-        ]
+        _f
+        for _f in (
+            normalise(idx_obj[0], idx_obj[1], keys, id(idx_obj[1]))
+            for idx_obj in enumerate(ld0)
+        )
+        if _f
     )
     processed_ld1 = frozenset(
-        [
-            _f
-            for _f in [
-                normalise(idx_obj1[0], idx_obj1[1], keys, id(idx_obj1[1]))
-                for idx_obj1 in enumerate(ld1)
-            ]
-            if _f
-        ]
+        _f
+        for _f in (
+            normalise(idx_obj1[0], idx_obj1[1], keys, id(idx_obj1[1]))
+            for idx_obj1 in enumerate(ld1)
+        )
+        if _f
     )
 
     return [
@@ -80,44 +120,3 @@ def l_of_d_intersection(ld0, ld1, keys):
         for result in processed_ld0.intersection(processed_ld1)
         for res in itervalues(result)
     ]
-
-
-def run_example(ld0, ld1, keys, expected_result):
-    result = tuple(l_of_d_intersection(ld0, ld1, keys))
-    # print result
-    assert result == expected_result, "{0} != {1}".format(result, expected_result)
-
-
-def main():
-    run_example(
-        ld0=[
-            {"foo": "bar", "haz": "more"},
-            {"can": "haz", "more": "haz"},
-            {"foo": "jar", "more": "fish"},
-        ],
-        ld1=[{"foo": "bar"}, {"can": "haz"}, {"foo": "foo"}],
-        keys=("foo",),
-        expected_result=({"foo": "bar", "haz": "more"},),
-    )
-
-    run_example(
-        ld0=[
-            {"orange": "black", "blue": "green", "yellow": "red"},
-            {"blue": "yellow"},
-            {"orange": "red", "yellow": "blue"},
-        ],
-        ld1=[
-            {"orange": "black", "yellow": "red"},
-            {"blue": "yellow"},
-            {"orange": "red", "yellow": "blue"},
-        ],
-        keys=("orange", "yellow"),
-        expected_result=(
-            {"orange": "black", "blue": "green", "yellow": "red"},
-            {"orange": "red", "yellow": "blue"},
-        ),
-    )
-
-
-if __name__ == "__main__":
-    main()

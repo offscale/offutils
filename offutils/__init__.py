@@ -16,7 +16,8 @@ if version[0] == "2":
     from itertools import imap as map
 
 from bisect import bisect_left
-from collections import Counter, Iterable, OrderedDict, deque, namedtuple
+from collections import Counter, OrderedDict, deque, namedtuple
+from collections.abc import Iterable
 from functools import reduce
 from itertools import islice, takewhile
 from os import urandom

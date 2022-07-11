@@ -1,3 +1,7 @@
+"""
+Test utility functions from util.py
+"""
+
 from collections import OrderedDict, defaultdict
 from copy import deepcopy
 from unittest import TestCase
@@ -7,6 +11,7 @@ from offutils import (
     add_to,
     binary_search,
     it_consumes,
+    l_of_d_intersection,
     lists_of_dicts_intersection_on,
     lists_of_dicts_intersection_on_any,
 )
@@ -184,6 +189,43 @@ class TestAddTo(TestCase):
             add_to(d0, val, OrderedDict, "foo", "bar", "can", "haz"), e0
         )
         self.assertDictEqual(d0, e0)
+
+
+def run_example(ld0, ld1, keys, expected_result):
+    result = tuple(l_of_d_intersection(ld0, ld1, keys))
+    # print result
+    assert result == expected_result, "{0} != {1}".format(result, expected_result)
+
+
+def main():
+    run_example(
+        ld0=[
+            {"foo": "bar", "haz": "more"},
+            {"can": "haz", "more": "haz"},
+            {"foo": "jar", "more": "fish"},
+        ],
+        ld1=[{"foo": "bar"}, {"can": "haz"}, {"foo": "foo"}],
+        keys=("foo",),
+        expected_result=({"foo": "bar", "haz": "more"},),
+    )
+
+    run_example(
+        ld0=[
+            {"orange": "black", "blue": "green", "yellow": "red"},
+            {"blue": "yellow"},
+            {"orange": "red", "yellow": "blue"},
+        ],
+        ld1=[
+            {"orange": "black", "yellow": "red"},
+            {"blue": "yellow"},
+            {"orange": "red", "yellow": "blue"},
+        ],
+        keys=("orange", "yellow"),
+        expected_result=(
+            {"orange": "black", "blue": "green", "yellow": "red"},
+            {"orange": "red", "yellow": "blue"},
+        ),
+    )
 
 
 if __name__ == "__main__":

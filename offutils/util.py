@@ -73,11 +73,23 @@ def normalise(idx, obj, keys, obj_id):
     """
     Normalise input obj whence key within.
 
+    :param idx: Index (included verbatim as first param of every entry in the hashabledict)
+    :type idx: ```int```
+
+    :param obj: Object to iterate over
+    :type obj: ```dict```
+
+    :param keys: Only include these keys from the `obj` in the result
+    :type keys: ```collections.abc.Sequence[str]```
+
+    :param obj_id: Object ID (included verbatim as first param of every entry in the hashabledict)
+    :type obj_id: ```int```
+
     :return: Hashable dict mapping key to (idx, id, value)
     :rtype: ```hashabledict[str, NamedTuple('Elem', [('idx', int), ('id', int), ('value', Any)])]```
     """
     return hashabledict(
-        (k, namedtuple("Elem", "idx id value")(idx, obj_id, v))
+        (k, namedtuple("Elem", ("idx", "id", "value"))(idx, obj_id, v))
         for k, v in iteritems(obj)
         if k in keys
     )
@@ -120,3 +132,6 @@ def l_of_d_intersection(ld0, ld1, keys):
         for result in processed_ld0.intersection(processed_ld1)
         for res in itervalues(result)
     ]
+
+
+__all__ = ["obj_equal_on", "normalise", "l_of_d_intersection"]

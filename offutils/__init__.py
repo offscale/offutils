@@ -7,6 +7,8 @@ import operator
 import socket
 from sys import version
 
+from six import string_types
+
 from offutils.util import iteritems, itervalues
 
 # TODO: Move everything from this package to better locations
@@ -440,3 +442,51 @@ def ensure_quoted(s, q="'"):
         if isinstance(s, str) and len(s) and s[0] not in ('"', "'")
         else s
     )
+
+
+def ensure_separated_str(s_or_l):
+    """
+    Ensure the input is a str or becomes a space separated string
+
+    :param s_or_l: String or list thereof
+    :type s_or_l: ```Union[str,List[str]]```
+
+    :return: `s_or_l` if it's a str otherwise space separated string
+    :rtype: ```str``
+    """
+    return s_or_l if isinstance(s_or_l, string_types) else " ".join(s_or_l)
+
+
+__all__ = [
+    "EmptyGet",
+    "add_to",
+    "binary_search",
+    "contains",
+    "ensure_quoted",
+    "ensure_separated_str",
+    "filter_strnums",
+    "find_by_key",
+    "find_common_d",
+    "find_replace_many",
+    "first_of_each",
+    "flatten",
+    "gen_random_str",
+    "generate_random_alphanum",
+    "get_sorted_strnum",
+    "hashabledict",
+    "is_instance_method",
+    "is_sequence",
+    "it_consumes",
+    "l_of_d_intersection",
+    "lists_of_dicts_intersection_on",
+    "lists_of_dicts_intersection_on_any",
+    "normalise",
+    "percent_overlap",
+    "ping_port",
+    "raise_f",
+    "str_from_file",
+    "subsequence",
+    "update_d",
+    "url_path_join",
+    "validate_conf",
+]

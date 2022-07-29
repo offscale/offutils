@@ -6,8 +6,6 @@ from collections import namedtuple
 from operator import methodcaller
 from sys import version
 
-from six import string_types
-
 if version[0] == "2":
     iteritems = methodcaller("iteritems")
     itervalues = methodcaller("itervalues")
@@ -136,17 +134,4 @@ def l_of_d_intersection(ld0, ld1, keys):
     ]
 
 
-def ensure_separated_str(s_or_l):
-    """
-    Ensure the input is a str or becomes a space separated string
-
-    :param s_or_l: String or list thereof
-    :type s_or_l: ```Union[str,List[str]]```
-
-    :return: `s_or_l` if it's a str otherwise space separated string
-    :rtype: ```str``
-    """
-    return s_or_l if isinstance(s_or_l, string_types) else " ".join(s_or_l)
-
-
-__all__ = ["ensure_separated_str", "l_of_d_intersection", "normalise", "obj_equal_on"]
+__all__ = ["l_of_d_intersection", "normalise", "obj_equal_on"]

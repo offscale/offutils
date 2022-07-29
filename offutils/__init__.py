@@ -27,7 +27,7 @@ from string import ascii_uppercase, digits
 from types import MethodType
 
 __author__ = "Samuel Marks"
-__version__ = "0.0.11"
+__version__ = "0.0.12"
 
 pp = PrettyPrinter(indent=4).pprint
 

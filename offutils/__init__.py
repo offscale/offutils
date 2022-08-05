@@ -444,17 +444,30 @@ def ensure_quoted(s, q="'"):
     )
 
 
+def is_non_str_iterable(t):
+    """
+    Whether the input is a non-str iterable
+
+    :parma t: Input argument
+    :type t: ```Any```
+
+    :return: Whether the input is a non-str iterable
+    :rtype: ```bool```
+    """
+    return isinstance(t, Iterable) and not isinstance(t, string_types)
+
+
 def ensure_separated_str(s_or_l):
     """
     Ensure the input is a str or becomes a space separated string
 
-    :param s_or_l: String or list thereof
-    :type s_or_l: ```Union[str,List[str]]```
+    :param s_or_l: String or iterable thereof
+    :type s_or_l: ```Union[str, Iterable[str]]```
 
-    :return: `s_or_l` if it's a str otherwise space separated string
+    :return: `s_or_l` if it's already a str otherwise `" ".join(s_or_l)`
     :rtype: ```str``
     """
-    return s_or_l if isinstance(s_or_l, string_types) else " ".join(s_or_l)
+    return " ".join(map(str, s_or_l)) if is_non_str_iterable(s_or_l) else s_or_l
 
 
 __all__ = [
@@ -475,6 +488,7 @@ __all__ = [
     "get_sorted_strnum",
     "hashabledict",
     "is_instance_method",
+    "is_non_str_iterable",
     "is_sequence",
     "it_consumes",
     "l_of_d_intersection",

@@ -457,17 +457,20 @@ def is_non_str_iterable(t):
     return isinstance(t, Iterable) and not isinstance(t, string_types)
 
 
-def ensure_separated_str(s_or_l):
+def ensure_separated_str(s_or_l, sep=" "):
     """
-    Ensure the input is a str or becomes a space separated string
+    Ensure the input is a str or becomes string joined by separator
 
     :param s_or_l: String or iterable thereof
     :type s_or_l: ```Union[str, Iterable[str]]```
 
-    :return: `s_or_l` if it's already a str otherwise `" ".join(s_or_l)`
+    :param sep: Separator to join non-str iterable on
+    :type sep: ```str```
+
+    :return: `s_or_l` if it's already a str otherwise `sep.join(s_or_l)`
     :rtype: ```str``
     """
-    return " ".join(map(str, s_or_l)) if is_non_str_iterable(s_or_l) else s_or_l
+    return sep.join(map(str, s_or_l)) if is_non_str_iterable(s_or_l) else s_or_l
 
 
 __all__ = [

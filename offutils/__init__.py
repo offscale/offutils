@@ -137,7 +137,7 @@ def subsequence(many_d):
     c = Counter()
     for d in many_d:
         for k, v in iteritems(d):
-            c["{0};;;{1}".format(k, v)] += 0.5
+            c["{};;;{}".format(k, v)] += 0.5
     for k, v in iteritems(c):
         c[k] = int(v)  # Remove all halves, and enable `.elements` to work
     return tuple(c.elements())
@@ -281,25 +281,21 @@ def l_of_d_intersection(ld0, ld1, keys):
         list1 = list(map(obj_to_d, list1))
 
     processed_ld0 = frozenset(
-        [
-            _f
-            for _f in [
-                normalise(idx_obj[0], idx_obj[1], keys, id(idx_obj[1]))
-                for idx_obj in enumerate(list0)
-            ]
-            if _f
+        _f
+        for _f in [
+            normalise(idx_obj[0], idx_obj[1], keys, id(idx_obj[1]))
+            for idx_obj in enumerate(list0)
         ]
+        if _f
     )
 
     processed_ld1 = frozenset(
-        [
-            _f
-            for _f in [
-                normalise(idx_obj1[0], idx_obj1[1], keys, id(idx_obj1[1]))
-                for idx_obj1 in enumerate(list1)
-            ]
-            if _f
+        _f
+        for _f in [
+            normalise(idx_obj1[0], idx_obj1[1], keys, id(idx_obj1[1]))
+            for idx_obj1 in enumerate(list1)
         ]
+        if _f
     )
 
     return (

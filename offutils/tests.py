@@ -194,7 +194,7 @@ class TestAddTo(TestCase):
 def run_example(ld0, ld1, keys, expected_result):
     result = tuple(l_of_d_intersection(ld0, ld1, keys))
     # print result
-    assert result == expected_result, "{0} != {1}".format(result, expected_result)
+    assert result == expected_result, "{} != {}".format(result, expected_result)
 
 
 def main():

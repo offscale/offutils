@@ -29,7 +29,7 @@ from string import ascii_uppercase, digits
 from types import MethodType
 
 __author__ = "Samuel Marks"
-__version__ = "0.0.12"
+__version__ = "0.0.13"
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -48,6 +48,11 @@ find_one.__doc__ == """ @raises `StopIteration` if not found """
 
 def raise_f(exception, *args, **kwargs):
     raise exception(*args, **kwargs)
+
+
+def rpartial(func, *args):
+    """Partially applies last arguments."""
+    return lambda *a: func(*(a + args))
 
 
 if version[0] == "3":
@@ -497,6 +502,7 @@ __all__ = [
     "percent_overlap",
     "ping_port",
     "raise_f",
+    "rpartial",
     "str_from_file",
     "subsequence",
     "update_d",

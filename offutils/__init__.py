@@ -29,7 +29,7 @@ from string import ascii_uppercase, digits
 from types import MethodType
 
 __author__ = "Samuel Marks"
-__version__ = "0.0.13"
+__version__ = "0.0.14"
 
 pp = PrettyPrinter(indent=4).pprint
 
@@ -131,8 +131,11 @@ def find_by_key(d, key):
 
 def subsequence(many_d):
     """
-    :param many_d enumerable containing many :type DictType
-    :returns entries which are common between all :type type(tuple)
+    :param many_d: enumerable containing many
+    :type many_d: DictType
+
+    :return: entries which are common between all
+    :rtype: type(tuple)
 
     Example:
          >>> ds = {'a': 5, 'b': 6}, {'a': 5}, {'a': 7}
@@ -172,7 +175,7 @@ l_of_d_intersection.__doc__ = """ Find intersection between a list of dicts and 
 :param keys:
 :type keys: List
 
-:returns intersection of ld0 and ld1 where key is equal
+:return: intersection of ld0 and ld1 where key is equal
 :rtype: List
 """
 
@@ -181,7 +184,7 @@ ping_port = lambda host="localhost", port=2379: (
         s.connect_ex((host, port))
     )
 )(socket.socket(socket.AF_INET, socket.SOCK_STREAM))
-ping_port.__doc__ = """ :returns True on success, [error] number > 0 otherwise """
+ping_port.__doc__ = """ :return: True on success, [error] number > 0 otherwise """
 
 
 def percent_overlap(s0, s1):
@@ -274,7 +277,7 @@ def l_of_d_intersection(ld0, ld1, keys):
     :param keys:
     :type keys: List
 
-    :returns intersection of ld0 and ld1 where key is equal. At best, will return `ld0` in full. At worst: [].
+    :return: intersection of ld0 and ld1 where key is equal. At best, will return `ld0` in full. At worst: [].
     :rtype: List
     """
     list0, list1 = ld0, ld1
@@ -425,8 +428,11 @@ gen_random_str = lambda n: "".join(
 
 def str_from_file(fname):
     """
-    :param fname :type basestring
-    :returns content of file :type str
+    :param fname: filename
+    :type fname: basestring
+
+    :return: content of filetype str
+    :rtype: ```str```
     """
     with open(fname) as f:
         return f.read()
@@ -499,6 +505,7 @@ __all__ = [
     "lists_of_dicts_intersection_on",
     "lists_of_dicts_intersection_on_any",
     "normalise",
+    "pp",
     "percent_overlap",
     "ping_port",
     "raise_f",

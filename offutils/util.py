@@ -107,7 +107,7 @@ def l_of_d_intersection(ld0, ld1, keys):
     :param keys:
     :type keys: List
 
-    :returns intersection of ld0 and ld1 where key is equal. At best, will return `ld0` in full. At worst: [].
+    :return: intersection of ld0 and ld1 where key is equal. At best, will return `ld0` in full. At worst: [].
     :rtype: ```List[Any]```
     """
     processed_ld0 = frozenset(

@@ -30,6 +30,7 @@ from types import MethodType
 
 __author__ = "Samuel Marks"
 __version__ = "0.0.14"
+__description__ = "Shared library (for `off-` prefixed packages)."
 
 pp = PrettyPrinter(indent=4).pprint
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Test utility functions from util.py
 """

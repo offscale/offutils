@@ -17,10 +17,12 @@ from offutils.util import iteritems, itervalues
 
 if version[0] == "2":
     from itertools import imap as map
+    from collections import Iterable
+else:
+    from collections.abc import Iterable
 
 from bisect import bisect_left
 from collections import Counter, OrderedDict, deque, namedtuple
-from collections.abc import Iterable
 from functools import reduce
 from itertools import islice, takewhile
 from os import urandom
